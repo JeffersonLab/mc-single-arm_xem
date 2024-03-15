@@ -69,6 +69,7 @@ C Event limits, topdrawer limits, physics quantities
 	integer*4 armSTOP_successes,armSTOP_trials
         real *8 beam_energy, el_energy, theta_sc!elastic calibration
         real *8 tar_mass, tar_atom_num          !elastic calibration
+	integer*4 inp_seed             ! Random seed set in input file
 C Initial and reconstructed track quantities.
 	real*8 dpp_init,dth_init,dph_init,xtar_init,ytar_init,ztar_init
 	real*8 dpp_recon,dth_recon,dph_recon,ztar_recon,ytar_recon
@@ -87,7 +88,7 @@ C Control flags (from input file)
 c	common /hutflag/ cer_flag,vac_flag
 C Hardwired control flags.
 	logical*4 hut_ntuple	/.true./
-        logical*4 spec_ntuple   /.true./
+        logical*4 spec_ntuple   /.false./
 	logical*4 decay_flag	/.false./
 
 	real*8	dpp_var(2),dth_var(2),dph_var(2),ztg_var(2)
@@ -423,6 +424,11 @@ C Strip off header
 	  if (ispec.eq.2) use_front_sieve=.false.
 	endif
 
+!     Read in flag for 'inp_seed' for setting seed to input file value
+      read (chanin,1001,end=1000,err=1000) str_line
+      write(*,*),str_line(1:last_char(str_line))
+      iss = rd_real(str_line,inp_seed)
+
 !     Read in flag for 'target atomic number (Z+N)' for elastic event if present
       read (chanin,1001,end=1000,err=1000) str_line
       write(*,*),str_line(1:last_char(str_line))
@@ -455,10 +461,14 @@ C------------------------------------------------------------------------------C
 ! function does not type cast string to integer otherwise.
           itime=time8()
    	  call ctime(itime,timestring)
-	  write(6,*) 'Using random seed based on clock time'
-          write(6,*) 'Starting random number seed: ',itime
+CAM	  write(6,*) 'Using random seed based on clock time'
+CAM	  write(6,*) 'Starting random number seed: ',itime
 C DJG - If you want to use default (fixed) seed, comment out the line below
-          call sgrnd(itime)
+CAM    call sgrnd(itime)
+
+	  write(6,*) 'Using random seed based on clock time'
+	  write(6,*) 'Starting random number seed: ',inp_seed
+	  call sgrnd(inp_seed)
 
 	do Itrial = 1,n_trials
 	   if(ispec.eq.1) then
