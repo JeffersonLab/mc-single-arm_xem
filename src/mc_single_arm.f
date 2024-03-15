@@ -424,10 +424,16 @@ C Strip off header
 	  if (ispec.eq.2) use_front_sieve=.false.
 	endif
 
+	inp_seed = 4357
 !     Read in flag for 'inp_seed' for setting seed to input file value
-      read (chanin,1001,end=1000,err=1000) str_line
-      write(*,*),str_line(1:last_char(str_line))
-      iss = rd_real(str_line,inp_seed)
+	read (chanin,1001,end=1000,err=1000) str_line
+	write(*,*),str_line(1:last_char(str_line))
+	if (.not.rd_int(str_line,tmp_int)) then
+	   write (*,*) 'Using Default input seed: ', inp_seed
+	endif
+	inp_seed = tmp_int
+	if(inp_seed.le.0)
+     > stop 'ERROR: input seed must be greater than zero!'
 
 !     Read in flag for 'target atomic number (Z+N)' for elastic event if present
       read (chanin,1001,end=1000,err=1000) str_line
@@ -466,7 +472,7 @@ CAM	  write(6,*) 'Starting random number seed: ',itime
 C DJG - If you want to use default (fixed) seed, comment out the line below
 CAM    call sgrnd(itime)
 
-	  write(6,*) 'Using random seed based on clock time'
+	  write(6,*) 'Using random seed based on setup file'
 	  write(6,*) 'Starting random number seed: ',inp_seed
 	  call sgrnd(inp_seed)
 
