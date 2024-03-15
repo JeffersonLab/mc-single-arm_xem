@@ -572,13 +572,13 @@ C energy is contained in the calorimeter.  Or, if you like, you can require
 C some distance between the track and the edge.  2-3 cm seems to be enough
 C to get most or all of the energy in the calorimeter
 
-!c	if (ys.gt.(hcal_left-2.0) .or. ys.lt.(hcal_right+2.0) .or.
-!c     >     xs.gt.(hcal_bottom-2.0) .or. xs.lt.(hcal_top+2.0)) then
-!	if (ys.gt.hcal_left .or. ys.lt.hcal_right .or.
-!     >      xs.gt.hcal_bottom .or. xs.lt.hcal_top) then
-!	  hSTOP_cal = hSTOP_cal + 1
-!	  goto 500
-!	endif
+!	if (ys.gt.(hcal_left-2.0) .or. ys.lt.(hcal_right+2.0) .or.
+!    >     xs.gt.(hcal_bottom-2.0) .or. xs.lt.(hcal_top+2.0)) then
+	if (ys.gt.hcal_left .or. ys.lt.hcal_right .or.
+     >      xs.gt.hcal_bottom .or. xs.lt.hcal_top) then
+	  hSTOP_cal = hSTOP_cal + 1
+	  goto 500
+	endif
 
 C If you use a calorimeter cut in your analysis, the engine applied a
 C a fiducial cut at the calorimeter.  This is based on the position of the
