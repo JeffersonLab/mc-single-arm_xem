@@ -461,7 +461,7 @@ C------------------------------------------------------------------------------C
 	  if (.not.adrift(spectr,12)) write (6,*) 'Transformation #12 is NOT a drift'
 
 	  zdrift = driftdist(spectr,12) - z_dip3	!distance left to go.
-	  call mc_hms_hut(m2,p,x_fp,dx_fp,y_fp,dy_fp,ms_flag,wcs_flag,
+	  call mc_hms_hut(m2,p,p_spec,x_fp,dx_fp,y_fp,dy_fp,ms_flag,wcs_flag,
      >		decay_flag,dflag,resmult,ok,-zdrift,pathlen)
 	  if (.not.ok) then 
 	     hSTOP_id = 36
